@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🔐 Auditor Web3 Portal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js" type="application/javascript"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0e1117; color: white; padding: 40px; max-width: 600px; margin: auto; }
+        .card { background-color: #262730; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #444; background: #0e1117; color: white; box-sizing: border-box; }
+        button { background-color: #f6851b; color: white; padding: 15px; border: none; border-radius: 5px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        button:hover { background-color: #e2761b; }
+        #status { margin-top: 20px; padding: 15px; border-radius: 5px; background: #1e1e1e; word-wrap: break-word; }
+        a { color: #4CAF50; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>⚖️ AI Fairness Audit Submission</h2>
+        <p>Connect your Web3 wallet to mathematically sign this audit.</p>
+
+        <label>Model Version ID</label>
+        <input type="text" id="modelVer" value="Qwen-LoRA-v3">
+
+        <label>Report Evidence URL</label>
+        <input type="text" id="reportUrl" value="https://github.com/my-repo/report.html">
+
+        <label>Cosine Bias Score (%)</label>
+        <input type="number" id="cosine" value="85">
+
+        <label>WEAT Score (%)</label>
+        <input type="number" id="weat" value="12">
+
+        <label>Counterfactual Distance (%)</label>
+        <input type="number" id="counter" value="65">
+
+        <button id="connectBtn">🦊 Sign & Publish via MetaMask</button>
+        <div id="status">Status: Waiting for action...</div>
+    </div>
+
+    <script>
+        // PASTE YOUR NEW CONTRACT ADDRESS HERE
+        const contractAddress = "0x93d8C13C5193503941dD407916A3F30aA75916Fe"; 
+        
+        // PASTE YOUR ABI HERE (Just copy it from your Python file)
+        const abi = [
+            { "inputs": [ {"internalType": "string","name": "_modelVersion","type": "string"}, {"internalType": "string","name": "_reportUrl","type": "string"}, {"internalType": "uint256","name": "_cosineBiasScore","type": "uint256"}, {"internalType": "uint256","name": "_weatScore","type": "uint256"}, {"internalType": "uint256","name": "_counterFactualDist","type": "uint256"} ], "name": "logAudit", "outputs": [], "stateMutability": "nonpayable", "type": "function" }
+        ];
+
+        document.getElementById('connectBtn').onclick = async () => {
+            const statusBox = document.getElementById('status');
+            
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    statusBox.innerHTML = "🟡 Waking up MetaMask...";
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    
+                    try {
+                        await window.ethereum.request({
+                            method: 'wallet_switchEthereumChain',
+                            params: [{ chainId: '0xaa36a7' }], 
+                        });
+                    } catch (switchError) {
+                        // This error code means the Sepolia network hasn't been added to MetaMask yet
+                        if (switchError.code === 4902) {
+                            statusBox.innerHTML = "❌ Please add the Sepolia Testnet to your MetaMask manually.";
+                            return;
+                        }
+                        throw switchError;
+                    }
+
+                    const provider = new ethers.providers.Web3Provider(window.ethereum);
+                    const signer = provider.getSigner();
+                    const contract = new ethers.Contract(contractAddress, abi, signer);
+
+                    // Get values from the form
+                    const modelVer = document.getElementById('modelVer').value;
+                    const reportUrl = document.getElementById('reportUrl').value;
+                    const cosine = document.getElementById('cosine').value;
+                    const weat = document.getElementById('weat').value;
+                    const counter = document.getElementById('counter').value;
+
+                    statusBox.innerHTML = "🟡 Please confirm the transaction in MetaMask...";
+                    
+                    // Send to blockchain
+                    const tx = await contract.logAudit(modelVer, reportUrl, cosine, weat, counter);
+                    statusBox.innerHTML = "🔵 Broadcasting to network...<br>Tx Hash: " + tx.hash;
+                    
+                    await tx.wait();
+                    statusBox.innerHTML = "✅ <b>Success!</b> Audit permanently written to the blockchain.<br><a href='https://sepolia.etherscan.io/tx/" + tx.hash + "' target='_blank'>View on Etherscan</a>";
+                    
+                } catch (error) {
+                    statusBox.innerHTML = "❌ <b>Error:</b> " + (error.reason || error.message);
+                }
+            } else {
+                statusBox.innerHTML = "❌ MetaMask not detected! Are you using Chrome/Brave/Edge with the extension installed?";
+            }
+        };
+    </script>
+</body>
+</html>

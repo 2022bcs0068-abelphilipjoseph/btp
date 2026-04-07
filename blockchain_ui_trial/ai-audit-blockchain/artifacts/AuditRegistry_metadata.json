@@ -1,0 +1,207 @@
+{
+	"compiler": {
+		"version": "0.8.31+commit.fd3a2265"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "modelId",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"name": "AuditLogged",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "audits",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "modelId",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "ipfsCid",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "datasetHash",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "biasScore",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "auditor",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_index",
+						"type": "uint256"
+					}
+				],
+				"name": "getAudit",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "modelId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "ipfsCid",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "datasetHash",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "biasScore",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "timestamp",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "auditor",
+								"type": "address"
+							}
+						],
+						"internalType": "struct AuditRegistry.AuditRecord",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAuditCount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_modelId",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_ipfsCid",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_datasetHash",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_biasScore",
+						"type": "uint256"
+					}
+				],
+				"name": "logAudit",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"AuditRegistry.sol": "AuditRegistry"
+		},
+		"evmVersion": "osaka",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"AuditRegistry.sol": {
+			"keccak256": "0x2ddc9d7d4888c5c7125f6635fef72f3f890cd2e24c8c749122f1873101dd65e9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7b4666e15a76b643ed2589d2b0e152ed0814ca221b44a45d2f93cec304d1c2e9",
+				"dweb:/ipfs/QmfRmQWsjwgNok7PsDZG3cpu68LkRG6VM4RZ4BSrzC7zun"
+			]
+		}
+	},
+	"version": 1
+}

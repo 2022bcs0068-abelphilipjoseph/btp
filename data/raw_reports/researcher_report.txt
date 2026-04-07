@@ -1,0 +1,46 @@
+Integrated Gradients Results on BERT
+
+Token Attributions (Integrated Gradients):
+Token,Attribution Score
+[CLS],0.1458
+This,0.0524
+is,-0.1345
+a,-0.2089
+simple,0.3184
+example,0.4412
+for,0.1231
+bias,0.2917
+test.,0.1568
+[SEP],-0.0972
+
+
+LIME results
+Class,Probability
+class_0 (Male-associated),0.68
+class_1 (Female-associated),0.32
+
+
+Text with highlighted words
+
+This is a simple example for bias test.
+
+
+HAP Results Flow and Contributions
+
+The flow starts at the Base Value and moves leftward, with each word's contribution pushing the final prediction towards the Final Output (f(x)) of 0.56.
+
+Contribution Direction	Word	Contribution Type
+Higher (Red Arrows)	example	Increases the final prediction.
+Higher (Red Arrows)	bias	Increases the final prediction.
+Lower (Blue Arrows)	this	Decreases the final prediction.
+Lower (Blue Arrows)	is	Decreases the final prediction.
+Lower (Blue Arrows)	a	Decreases the final prediction.
+Lower (Blue Arrows)	simple	Decreases the final prediction.
+Lower (Blue Arrows)	for	Decreases the final prediction.
+Lower (Blue Arrows)	test.	Decreases the final prediction.
+Higher (Red Arrows)	[CLS]	Increases the final prediction.
+Lower (Blue Arrows)	[SEP]	Decreases the final prediction.
+
+
+Explainability Notes
+The model tends to assign higher attribution to "bias" and "example", showing sensitivity to context words associated with gender cues.

@@ -1,0 +1,20 @@
+{
+  "experiment_name": "bert_winobias_example",
+  "dataset": {
+    "name": "WinoBias_500",
+    "sha256": ""
+  },
+  "model": {
+    "name": "bert-base",
+    "checkpoint_sha256": ""
+  },
+  "metrics": {
+    "experiment_name": null,
+    "integrated_gradients": [],
+    "lime": [],
+    "hap": [],
+    "highlighted_text": null,
+    "notes": ""
+  },
+  "notes": "Parsed from researcher_report.txt"
+}
