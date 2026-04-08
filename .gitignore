@@ -42,3 +42,15 @@ Thumbs.db
 # Project Specific
 .states/
 data/
+
+# Agentic BERT Dashboard Outputs
+Agentic_BERT_Dashboard/explainability/debiased_bert_final/
+Agentic_BERT_Dashboard/explainability/explanation_report*.html
+
+# Common Model Weights
+*.safetensors
+*.bin
+*.ckpt
+*.pt
+*.pth
+*.h5

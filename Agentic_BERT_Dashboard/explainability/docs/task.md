@@ -1,0 +1,23 @@
+# Task: Agentic BERT Bias Dashboard
+
+- [x] Planning and Design [x]
+    - [x] Analyze existing BERT and explanation code
+    - [x] Create implementation plan
+    - [x] Design dashboard layout
+- [x] Implementation [x]
+    - [x] Setup Streamlit environment
+    - [x] Implement "Before" (Base BERT) and "After" (Debiased BERT) loading
+    - [x] Implement Resume text extraction/processing
+    - [x] Implement "Agentic" logic (Auditor Agent)
+    - [x] Integrate explanation tools (LRP, SHAP, LIME, Attention) into the dashboard
+    - [x] Add more explanation reports
+    - [x] Build the UI (Tabs for different reports)
+- [x] JD-Aware Bias Audit [x]
+    - [x] Add Job Description input field to dashboard
+    - [x] Update scoring logic to include JD (concatenation)
+    - [x] Design sample "Bias Flip" scenario (Male less qualified, Female more qualified)
+    - [x] Update Agentic Auditor to reason about JD matchup
+- [x] Verification [x]
+    - [x] Test with "Bias Flip" sample texts
+    - [x] Verify Base Model shows bias (Male > Female)
+    - [x] Verify Debiased Model shows fairness (Female >= Male)
