@@ -26,10 +26,17 @@
         <label>Model ID / Version</label>
         <input type="text" id="modelVer" placeholder="e.g., BERT-Debiased-v2.1" value="BERT-Debiased-v2.1">
 
-        <label>AI Agent Markdown Report</label>
-        <textarea id="agentReport" rows="10" placeholder="Paste the Streamlit Agent output here..."></textarea>
+        <div id="manualMode">
+            <label>AI Agent Markdown Report</label>
+            <textarea id="agentReport" rows="10" placeholder="Paste the Streamlit Agent output here..."></textarea>
+            <div class="hash-preview" id="hashPreview">SHA-256 Hash will appear here...</div>
+        </div>
         
-        <div class="hash-preview" id="hashPreview">SHA-256 Hash will appear here...</div>
+        <div id="autoMode" style="display:none; margin-top:20px; padding:15px; background:#e8f4f8; border-left:4px solid #3498db; border-radius:6px;">
+            <b style="color:#2c3e50;">Secured Pre-Calculated Report Hash:</b>
+            <div id="preCalculatedHash" style="font-family:monospace; margin-top:10px; word-break:break-all; font-weight:bold; color:#2980b9;"></div>
+            <p style="font-size:0.85em; color:#555; margin-top:8px;">The report was processed by the Agentic API and cryptographically secured.</p>
+        </div>
 
         <button id="submitBtn">Sign & Anchor to Blockchain</button>
 
@@ -57,6 +64,29 @@
             return "0x" + hashHex;
         }
 
+        // Global variable for URL Injection
+        let injectedHash = null;
+
+        // Initialize URL Parameters on Load
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlHash = urlParams.get('hash');
+            const urlModelVer = urlParams.get('modelVer');
+
+            if (urlModelVer) {
+                document.getElementById('modelVer').value = urlModelVer;
+                document.getElementById('modelVer').setAttribute('readonly', true);
+                document.getElementById('modelVer').style.backgroundColor = '#eef2f5';
+            }
+
+            if (urlHash) {
+                injectedHash = urlHash;
+                document.getElementById('manualMode').style.display = 'none';
+                document.getElementById('autoMode').style.display = 'block';
+                document.getElementById('preCalculatedHash').innerText = injectedHash;
+            }
+        };
+
         // Live preview of the hash as the auditor types/pastes
         document.getElementById('agentReport').addEventListener('input', async function() {
             const text = this.value;
@@ -78,10 +108,15 @@
                 }
 
                 const modelVer = document.getElementById('modelVer').value;
-                const reportText = document.getElementById('agentReport').value;
-
-                if (!reportText) {
-                    throw new Error("Please paste the AI Agent's report.");
+                
+                let reportHash = injectedHash;
+                
+                if (!reportHash) {
+                    const reportText = document.getElementById('agentReport').value;
+                    if (!reportText) {
+                        throw new Error("Please paste the AI Agent's report.");
+                    }
+                    reportHash = await generateHash(reportText);
                 }
 
                 statusBox.style.backgroundColor = "#fff3cd";
@@ -92,9 +127,6 @@
                 await provider.send("eth_requestAccounts", []);
                 const signer = provider.getSigner();
                 const contract = new ethers.Contract(contractAddress, contractABI, signer);
-
-                // Hash the report
-                const reportHash = await generateHash(reportText);
 
                 statusBox.innerHTML = "🟡 Please confirm the transaction in MetaMask...<br><br>Anchoring Hash: " + reportHash;
                 

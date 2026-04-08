@@ -11,6 +11,7 @@ import io
 import base64
 from lime.lime_text import LimeTextExplainer
 import os
+import hashlib
 
 # --- Page Config ---
 st.set_page_config(page_title="Agentic BERT Bias Dashboard", layout="wide")
@@ -380,10 +381,24 @@ if st.button("Analyze Fairness", type="primary"):
             # 1. Render the formatted version for the user to read
             st.markdown(audit_verdict)
             
-            # 2. THE NOVELTY: Create a raw text box for Web3 Export
+            # 2. THE NOVELTY: URL-Bridged Web3 Export
             st.subheader("📋 Web3 Export: Cryptographic Anchoring")
-            st.info("Copy the raw markdown below and paste it into the **Web3 Auditor Portal** to generate the SHA-256 hash and anchor it to the blockchain.")
-            st.text_area("Raw Markdown (Ctrl+A, Ctrl+C)", value=audit_verdict, height=250)
+            
+            # Generate the SHA-256 hash natively in Python
+            report_bytes = audit_verdict.encode('utf-8')
+            report_hash = "0x" + hashlib.sha256(report_bytes).hexdigest()
+            model_ver = "Agentic-BERT-Debiased-v2.1"
+            
+            # Connect to local port 8000 where the Auditor Portal is running
+            portal_url = f"http://127.0.0.1:8000/ai-audit-blockchain/auditor_portal.html?hash={report_hash}&modelVer={model_ver}"
+            
+            st.info("The cryptographic hash of this explanation has been calculated. Click below to securely anchor it to the Sepolia blockchain using MetaMask.")
+            
+            st.markdown(f'<a href="{portal_url}" target="_blank" style="text-decoration:none;"><button style="background-color:#f6851b; color:white; border:none; padding:12px 20px; font-size:16px; font-weight:bold; border-radius:6px; cursor:pointer; width:100%;">Sign & Anchor to Blockchain</button></a>', unsafe_allow_html=True)
+            
+            with st.expander("Show Technical Details"):
+                st.write(f"**Calculated Hash:** `{report_hash}`")
+                st.text_area("Raw Markdown Record", value=audit_verdict, height=150)
 
 st.sidebar.markdown("""
 ### BERT-Only Auditor

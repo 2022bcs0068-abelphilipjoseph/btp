@@ -1,0 +1,17 @@
+Transformer-based language models propagate structural biases, limiting their
+trustworthy deployment in high-stakes domains. This work presents a unified
+framework for bias mitigation, explainability, and cryptographic verification
+across diverse architectures, including bidirectional encoders (BERT) and
+generative decoders (Phi-3, Qwen). We advance bias evaluation from su-
+perficial probability metrics to intrinsic geometric analysis (Cosine Distance,
+WEAT) and utilize the Logit Lens for layer-wise bias analysis, tracking ex-
+actly where stereotypes form computationally. To resolve cross-architecture
+explainability challenges, we introduce tokenizer-agnostic “Linguistic Mega-
+Tokens” and Target-Self-Attention Masking, enabling mathematically con-
+sistent “Bias Gaze Snapshots” using SHAP, LIME, and LIG. Finally, we se-
+cure auditability using a Zero-Trust Decoupled Blockchain Architecture. By
+enforcing Cryptographic Role-Based Access Control (RBAC) via MetaMask-
+signed Solidity smart contracts, the system guarantees immutable, decen-
+tralized verification of fairness metrics. Ultimately, this establishes a robust,
+end-to-end pipeline for auditing and enforcing fairness in Large Language
+Models

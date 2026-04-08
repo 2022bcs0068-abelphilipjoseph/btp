@@ -5,3 +5,4 @@ lime
 shap
 numpy
 matplotlib
+streamlit
