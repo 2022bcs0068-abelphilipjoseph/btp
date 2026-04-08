@@ -18,3 +18,27 @@
 
 # Hardhat coverage reports
 /coverage
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environments
+.env
+.env.*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/
+
+# Project Specific
+.states/
+data/
