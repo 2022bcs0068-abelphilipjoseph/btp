@@ -54,6 +54,11 @@
             "function logAudit(string _modelVersion, string _reportUrl, uint256 _cosineBiasScore, uint256 _weatScore, uint256 _counterFactualDist) public"
         ];
 
+        // Security: Escape HTML to prevent Reflected XSS
+        function escapeHTML(str) {
+            return String(str).replace(/[&<>'"]/g, match => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[match]));
+        }
+
         // Function to generate SHA-256 hash of the text
         async function generateHash(text) {
             const encoder = new TextEncoder();
@@ -128,7 +133,7 @@
                 const signer = provider.getSigner();
                 const contract = new ethers.Contract(contractAddress, contractABI, signer);
 
-                statusBox.innerHTML = "🟡 Please confirm the transaction in MetaMask...<br><br>Anchoring Hash: " + reportHash;
+                statusBox.innerHTML = "🟡 Please confirm the transaction in MetaMask...<br><br>Anchoring Hash: " + escapeHTML(reportHash);
                 
                 // We send the Hash in place of the _reportUrl. 
                 // We send '0' for the legacy score metrics since the agent report now handles the logic.
@@ -137,8 +142,8 @@
                 // 1. Show the pending transaction with a clickable link
                 const etherscanTxUrl = `https://sepolia.etherscan.io/tx/${tx.hash}`;
                 statusBox.innerHTML = `⏳ Transaction submitted! Waiting for network consensus...<br><br>
-                <a href="${etherscanTxUrl}" target="_blank" style="color: #856404; text-decoration: underline;">
-                    Tracking ID: ${tx.hash} (Click to view live on Etherscan)
+                <a href="${escapeHTML(etherscanTxUrl)}" target="_blank" style="color: #856404; text-decoration: underline;">
+                    Tracking ID: ${escapeHTML(tx.hash)} (Click to view live on Etherscan)
                 </a>`;
 
                 await tx.wait();
@@ -147,15 +152,15 @@
                 statusBox.style.backgroundColor = "#d4edda";
                 statusBox.style.color = "#155724";
                 statusBox.innerHTML = `✅ <b>Success!</b> Agentic Report anchored immutably to the blockchain.<br><br>
-                <b>Report Hash:</b> ${reportHash}<br><br>
-                <a href="${etherscanTxUrl}" target="_blank" style="color: #155724; font-weight: bold; text-decoration: underline;">
+                <b>Report Hash:</b> ${escapeHTML(reportHash)}<br><br>
+                <a href="${escapeHTML(etherscanTxUrl)}" target="_blank" style="color: #155724; font-weight: bold; text-decoration: underline;">
                     🔍 View Verified Transaction on Etherscan
                 </a>`;
 
             } catch (error) {
                 statusBox.style.backgroundColor = "#f8d7da";
                 statusBox.style.color = "#721c24";
-                statusBox.innerHTML = "❌ <b>Error:</b> " + error.message;
+                statusBox.innerHTML = "❌ <b>Error:</b> " + escapeHTML(error.message);
             }
         });
     </script>
