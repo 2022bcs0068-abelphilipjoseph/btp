@@ -54,3 +54,6 @@ Agentic_BERT_Dashboard/explainability/explanation_report*.html
 *.pt
 *.pth
 *.h5
+
+# Logs
+*.log
